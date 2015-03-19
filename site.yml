@@ -12,6 +12,7 @@
     - { role: ssmtp, tags: [ssmtp mail] }
     - { role: php, tags: [php] }
     - { role: nginx, tags: [nginx] }
+    - { role: php-fpm, tags: [php-fpm] }
     - { role: memcached, tags: [memcached] }
     - { role: composer, tags: [composer] }
     - { role: wp-cli, tags: [wp-cli] }
