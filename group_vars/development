@@ -4,7 +4,7 @@ wordpress_sites:
   - site_name: example.dev
     site_hosts:
       - example.dev
-    local_path: '../example.dev' # path targeting local project directory (relative to root/Vagrantfile)
+    local_path: '../{{APP_NAME}}' # path targeting local project directory (relative to root/Vagrantfile)
     user: vagrant
     group: www-data
     site_install: true
