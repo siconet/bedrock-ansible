@@ -1,6 +1,7 @@
 ---
 - name: Update Apt
   apt: update_cache=yes
+  ignore_errors: yes
 
 - name: Checking essentials
   apt: name="{{ item }}" state=present
@@ -11,3 +12,9 @@
   - python-mysqldb
   - curl
   - git-core
+
+- name: Fix double updates apt-get source list
+  command: sed 's/\/ubuntu\/ubuntu/\/ubuntu\//g' /etc/apt/sources.list
+
+- name: Update apt-get source list
+  command: sed 's/http:\/\/mirrors.digitalocean.com/http:\/\/mirrors.digitalocean.com\/ubuntu\//g' /etc/apt/sources.list

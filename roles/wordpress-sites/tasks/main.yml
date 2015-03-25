@@ -34,6 +34,7 @@
     chdir: "{{ www_root }}/{{ item.site_name }}/current/"
   with_items: wordpress_sites
   when: item.run_composer | default(True) == True
+  ignore_errors: True
 
 - name: WP installed?
   command: wp core is-installed --allow-root
