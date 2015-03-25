@@ -56,6 +56,7 @@
     chdir: "{{ www_root }}/{{ item.item.site_name }}/current/"
   with_items: site_statuses.results
   when: item.rc == 1 and item.item.site_install == True and item.item.multisite.enabled | default(False) == False
+  ignore_errors: True
   notify: reload nginx
 
 - name: Install WP Multisite
@@ -72,6 +73,7 @@
     chdir: "{{ www_root }}/{{ item.item.site_name }}/current/"
   with_items: site_statuses.results
   when: item.rc == 1 and item.item.site_install == True and item.item.multisite.enabled | default(False) == True
+  ignore_errors: True
   notify: reload nginx
 
 - name: Setup system cron

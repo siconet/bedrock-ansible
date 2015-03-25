@@ -19,7 +19,7 @@ wordpress_sites:
       wp_home: http://example.dev
       wp_siteurl: http://example.dev/wp
       wp_env: development
-      db_name: example_dev
+      db_name: dev_db_name
       db_user: example_dbuser
       db_password: example_dbpassword
 
