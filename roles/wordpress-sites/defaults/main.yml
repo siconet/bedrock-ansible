@@ -8,3 +8,4 @@ generated_env_vars:
   - logged_in_salt
   - nonce_salt
 memcached_sessions: false
+strip_www: true

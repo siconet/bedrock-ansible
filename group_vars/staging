@@ -1,4 +1,4 @@
-mysql_root_password: stagingpw
+mysql_root_password: rootpwd
 
 wordpress_sites:
   - site_name: staging.example.com
