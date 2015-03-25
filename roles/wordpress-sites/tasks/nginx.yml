@@ -24,6 +24,3 @@
 
 - name: Restart nginx
   command: /etc/init.d/nginx restart
-
-- name: Uninstall and install php5-fpm
-  command: apt-get remove php5-fpm && apt-get install php5-fpm && service php5-fpm restart
