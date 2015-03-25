@@ -2,3 +2,6 @@
 - name: reload nginx
   service: name=nginx state=reloaded
 
+- name: restart php-fpm
+  service: name=php-fpm state=restarted
+

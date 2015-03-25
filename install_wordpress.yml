@@ -1,0 +1,8 @@
+---
+- name: "Install Wordpress"
+  hosts: web
+  sudo: yes
+  remote_user: root
+
+  roles:
+    - { role: wordpress-sites, tags: [wordpress-sites] }
