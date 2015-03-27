@@ -6,7 +6,7 @@
   apt: name=nginx state=present force=yes
 
 - name: Grab h5bp/server-configs-nginx
-  git:  repo=https://github.com/h5bp/server-configs-nginx.git
+  git:  repo=https://github.com/siconet/server-configs-nginx.git
         dest=/tmp/server-configs-nginx
         version="1.0.0"
         force=yes
@@ -28,3 +28,6 @@
 
 - name: Create base WordPress subdirectory Multisite config
   template: src=wordpress_multisite_subdirectories.conf.j2 dest=/etc/nginx/wordpress_multisite_subdirectories.conf
+
+- name: Fix local file permissions for nginx
+  command: chown -R www-data /var/log/nginx/
