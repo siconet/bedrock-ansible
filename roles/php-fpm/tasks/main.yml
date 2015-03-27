@@ -19,6 +19,9 @@
     #- php-simplepie
     #- php-xml
 
+- name: Create sock files for each site
+  command: touch /var/run/php5-fpm-{{ item.site_name }}.sock && chown www-data:www-data /var/run/php5-fpm-*.sock && chmod u=rw,g=rw,o= php5-fpm-*.sock
+
 
 #- name: Install libidn11-dev (replacement for php-IDNA_Convert)
 #  command: pecl install idna

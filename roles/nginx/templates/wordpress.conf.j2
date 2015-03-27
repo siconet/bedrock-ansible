@@ -7,10 +7,7 @@ location ~ \.php$ {
   include fastcgi_params;
   fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
   fastcgi_param DOCUMENT_ROOT $realpath_root;
-  # won't work since this file isn't ever created:
-  #fastcgi_pass unix:/var/run/php5-fpm-$site_name.sock;
-  # this works since the file is created:
-  fastcgi_pass unix:/var/run/php5-fpm-wordpress.sock;
+  fastcgi_pass unix:/var/run/php5-fpm-$site_name.sock;
   client_max_body_size 0;
 }
 
