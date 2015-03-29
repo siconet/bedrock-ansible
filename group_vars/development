@@ -1,4 +1,4 @@
-mysql_root_password: devrootmysqlpwd
+mysql_root_password: devpw
 
 wordpress_sites:
   - site_name: example.dev
