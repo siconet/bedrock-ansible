@@ -35,7 +35,7 @@ Vagrant.configure('2') do |config|
 
   if Vagrant::Util::Platform.windows?
     wordpress_sites.each do |site|
-      config.vm.synced_folder site['local_path'], remote_site_path(site), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
+      config.vm.synced_folder site['local_path'], remote_site_path(site), id: 'current', owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
     end
   else
     if !Vagrant.has_plugin? 'vagrant-bindfs'
@@ -48,19 +48,40 @@ Vagrant.configure('2') do |config|
       end
     end
   end
-
-  config.vm.provision :ansible do |ansible|
-    ansible.playbook = File.join(ANSIBLE_PATH, 'local.yml')
-    ansible.groups = {
-      'web' => ['default'],
-      'development' => ['default']
-    }
-    ansible.extra_vars = {
-      ansible_ssh_user: 'vagrant',
-      user: 'vagrant'
-    }
+   
+  # Check if we are on Windows using rbconfig
+  # windows shell script: https://gist.github.com/starise/e90d981b5f9e1e39f632
+  require 'rbconfig'
+  is_windows = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
+  if is_windows
+    # Provisioning configuration for shell script (Windows host)
+    config.vm.provision :shell,
+	                    :keep_color => true,
+						:inline => "export PYTHONUNBUFFERED=1 && export ANSIBLE_FORCE_COLOR=1 && cd /vagrant/windows-provisioning && ./windows.sh"
+  
+    config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+    
+    #config.vm.provision "shell" do |sh|
+    #  sh.path = "windows.sh"
+    #  sh.args = "site.yml hosts/development"
+    #end
+  else
+    # Standard bedrock configuration for Ansible (Mac/Linux host).
+    config.vm.provision :ansible do |ansible|
+      # adjust paths relative to Vagrantfile
+      ansible.playbook = './site.yml'
+      ansible.groups = {
+        'web' => ['default'],
+        'development' => ['default']
+      }
+      ansible.extra_vars = {
+        ansible_ssh_user: 'vagrant',
+        user: 'vagrant'
+      }
+      ansible.sudo = true
+    end
   end
-
+  
   config.vm.provider 'virtualbox' do |vb|
     # Give VM access to all cpu cores on the host
     cpus = case RbConfig::CONFIG['host_os']
@@ -76,6 +97,12 @@ Vagrant.configure('2') do |config|
     # Fix for slow external network connections
     vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
     vb.customize ['modifyvm', :id, '--natdnsproxy1', 'on']
+    
+    # adjust paths relative to Vagrantfile
+    vb.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/vagrant", "1"]
+    vb.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/current", "1"]
+    vb.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
+    vb.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/vagrant-root", "1"]
   end
 end
 
