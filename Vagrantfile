@@ -69,7 +69,7 @@ Vagrant.configure('2') do |config|
     # Standard bedrock configuration for Ansible (Mac/Linux host).
     config.vm.provision :ansible do |ansible|
       # adjust paths relative to Vagrantfile
-      ansible.playbook = './site.yml'
+      ansible.playbook = './local.yml'
       ansible.groups = {
         'web' => ['default'],
         'development' => ['default']
