@@ -33,9 +33,18 @@ Vagrant.configure('2') do |config|
     puts 'vagrant plugin install vagrant-hostsupdater'
   end
 
+  if Vagrant.has_plugin? 'vagrant-winnfsd'
+  	# do nothing
+  else
+    puts 'vagrant-winnfsd missing, please install the plugin:'
+    puts 'vagrant plugin install vagrant-winnfsd'
+  end
+
   if Vagrant::Util::Platform.windows?
     wordpress_sites.each do |site|
-      config.vm.synced_folder site['local_path'], remote_site_path(site), id: 'current', owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
+      config.vm.synced_folder site['local_path'], remote_site_path(site), id: 'current', type: 'nfs'
+      # A private dhcp network is required for NFS to work (on Windows hosts, at least)
+      config.vm.network "private_network", type: "dhcp"
     end
   else
     if !Vagrant.has_plugin? 'vagrant-bindfs'

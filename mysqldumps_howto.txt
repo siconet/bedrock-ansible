@@ -1,0 +1,8 @@
+Credentials can be found in the bedrock-ansible/group-vars directory
+
+EXPORT
+mysqldump dbname -u USER -p > database.sql
+
+
+IMPORT
+mysql -p dbname -u USER -p < database.sql
